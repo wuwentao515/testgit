@@ -1,0 +1,394 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinoway.cisp.dao.InstiDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.sinoway.cisp.entitys.InstiDetail" >
+    <id column="insti_code" property="instiCode" jdbcType="INTEGER" />
+    <result column="insti_type" property="instiType" jdbcType="INTEGER" />
+    <result column="insti_name" property="instiName" jdbcType="VARCHAR" />
+    <result column="insti_shortname" property="instiShortname" jdbcType="VARCHAR" />
+    <result column="corporation_name" property="corporationName" jdbcType="VARCHAR" />
+    <result column="social_credit_code" property="socialCreditCode" jdbcType="VARCHAR" />
+    <result column="credit_person" property="creditPerson" jdbcType="VARCHAR" />
+    <result column="general_manager" property="generalManager" jdbcType="VARCHAR" />
+    <result column="registered_address" property="registeredAddress" jdbcType="VARCHAR" />
+    <result column="registered_capital" property="registeredCapital" jdbcType="VARCHAR" />
+    <result column="zip_code" property="zipCode" jdbcType="INTEGER" />
+    <result column="insti_phone" property="instiPhone" jdbcType="VARCHAR" />
+    <result column="insti_location" property="instiLocation" jdbcType="VARCHAR" />
+    <result column="web_url" property="webUrl" jdbcType="VARCHAR" />
+    <result column="fax_number" property="faxNumber" jdbcType="VARCHAR" />
+    <result column="access_type" property="accessType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    insti_code, insti_type, insti_name, insti_shortname, corporation_name, social_credit_code, 
+    credit_person, general_manager, registered_address, registered_capital, zip_code, 
+    insti_phone, insti_location, web_url, fax_number, access_type
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sinoway.cisp.entitys.InstiDetailExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from insti_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from insti_detail
+    where insti_code = #{instiCode,jdbcType=INTEGER}
+  </select>
+  
+  <select id="selectByCode" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from insti_detail
+    where insti_code = #{instiCode,jdbcType=INTEGER} LIMIT 1
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from insti_detail
+    where insti_code = #{instiCode,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinoway.cisp.entitys.InstiDetailExample" >
+    delete from insti_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinoway.cisp.entitys.InstiDetail" >
+    insert into insti_detail (insti_code, insti_type, insti_name, 
+      insti_shortname, corporation_name, social_credit_code, 
+      credit_person, general_manager, registered_address, 
+      registered_capital, zip_code, insti_phone, 
+      insti_location, web_url, fax_number, 
+      access_type)
+    values (#{instiCode,jdbcType=INTEGER}, #{instiType,jdbcType=INTEGER}, #{instiName,jdbcType=VARCHAR}, 
+      #{instiShortname,jdbcType=VARCHAR}, #{corporationName,jdbcType=VARCHAR}, #{socialCreditCode,jdbcType=VARCHAR}, 
+      #{creditPerson,jdbcType=VARCHAR}, #{generalManager,jdbcType=VARCHAR}, #{registeredAddress,jdbcType=VARCHAR}, 
+      #{registeredCapital,jdbcType=VARCHAR}, #{zipCode,jdbcType=INTEGER}, #{instiPhone,jdbcType=VARCHAR}, 
+      #{instiLocation,jdbcType=VARCHAR}, #{webUrl,jdbcType=VARCHAR}, #{faxNumber,jdbcType=VARCHAR}, 
+      #{accessType,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinoway.cisp.entitys.InstiDetail" >
+    insert into insti_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="instiCode != null" >
+        insti_code,
+      </if>
+      <if test="instiType != null" >
+        insti_type,
+      </if>
+      <if test="instiName != null" >
+        insti_name,
+      </if>
+      <if test="instiShortname != null" >
+        insti_shortname,
+      </if>
+      <if test="corporationName != null" >
+        corporation_name,
+      </if>
+      <if test="socialCreditCode != null" >
+        social_credit_code,
+      </if>
+      <if test="creditPerson != null" >
+        credit_person,
+      </if>
+      <if test="generalManager != null" >
+        general_manager,
+      </if>
+      <if test="registeredAddress != null" >
+        registered_address,
+      </if>
+      <if test="registeredCapital != null" >
+        registered_capital,
+      </if>
+      <if test="zipCode != null" >
+        zip_code,
+      </if>
+      <if test="instiPhone != null" >
+        insti_phone,
+      </if>
+      <if test="instiLocation != null" >
+        insti_location,
+      </if>
+      <if test="webUrl != null" >
+        web_url,
+      </if>
+      <if test="faxNumber != null" >
+        fax_number,
+      </if>
+      <if test="accessType != null" >
+        access_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="instiCode != null" >
+        #{instiCode,jdbcType=INTEGER},
+      </if>
+      <if test="instiType != null" >
+        #{instiType,jdbcType=INTEGER},
+      </if>
+      <if test="instiName != null" >
+        #{instiName,jdbcType=VARCHAR},
+      </if>
+      <if test="instiShortname != null" >
+        #{instiShortname,jdbcType=VARCHAR},
+      </if>
+      <if test="corporationName != null" >
+        #{corporationName,jdbcType=VARCHAR},
+      </if>
+      <if test="socialCreditCode != null" >
+        #{socialCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="creditPerson != null" >
+        #{creditPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="generalManager != null" >
+        #{generalManager,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredAddress != null" >
+        #{registeredAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredCapital != null" >
+        #{registeredCapital,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        #{zipCode,jdbcType=INTEGER},
+      </if>
+      <if test="instiPhone != null" >
+        #{instiPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="instiLocation != null" >
+        #{instiLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="webUrl != null" >
+        #{webUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="faxNumber != null" >
+        #{faxNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="accessType != null" >
+        #{accessType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinoway.cisp.entitys.InstiDetailExample" resultType="java.lang.Integer" >
+    select count(*) from insti_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update insti_detail
+    <set >
+      <if test="record.instiCode != null" >
+        insti_code = #{record.instiCode,jdbcType=INTEGER},
+      </if>
+      <if test="record.instiType != null" >
+        insti_type = #{record.instiType,jdbcType=INTEGER},
+      </if>
+      <if test="record.instiName != null" >
+        insti_name = #{record.instiName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.instiShortname != null" >
+        insti_shortname = #{record.instiShortname,jdbcType=VARCHAR},
+      </if>
+      <if test="record.corporationName != null" >
+        corporation_name = #{record.corporationName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.socialCreditCode != null" >
+        social_credit_code = #{record.socialCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.creditPerson != null" >
+        credit_person = #{record.creditPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="record.generalManager != null" >
+        general_manager = #{record.generalManager,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registeredAddress != null" >
+        registered_address = #{record.registeredAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="record.registeredCapital != null" >
+        registered_capital = #{record.registeredCapital,jdbcType=VARCHAR},
+      </if>
+      <if test="record.zipCode != null" >
+        zip_code = #{record.zipCode,jdbcType=INTEGER},
+      </if>
+      <if test="record.instiPhone != null" >
+        insti_phone = #{record.instiPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.instiLocation != null" >
+        insti_location = #{record.instiLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.webUrl != null" >
+        web_url = #{record.webUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.faxNumber != null" >
+        fax_number = #{record.faxNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="record.accessType != null" >
+        access_type = #{record.accessType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update insti_detail
+    set insti_code = #{record.instiCode,jdbcType=INTEGER},
+      insti_type = #{record.instiType,jdbcType=INTEGER},
+      insti_name = #{record.instiName,jdbcType=VARCHAR},
+      insti_shortname = #{record.instiShortname,jdbcType=VARCHAR},
+      corporation_name = #{record.corporationName,jdbcType=VARCHAR},
+      social_credit_code = #{record.socialCreditCode,jdbcType=VARCHAR},
+      credit_person = #{record.creditPerson,jdbcType=VARCHAR},
+      general_manager = #{record.generalManager,jdbcType=VARCHAR},
+      registered_address = #{record.registeredAddress,jdbcType=VARCHAR},
+      registered_capital = #{record.registeredCapital,jdbcType=VARCHAR},
+      zip_code = #{record.zipCode,jdbcType=INTEGER},
+      insti_phone = #{record.instiPhone,jdbcType=VARCHAR},
+      insti_location = #{record.instiLocation,jdbcType=VARCHAR},
+      web_url = #{record.webUrl,jdbcType=VARCHAR},
+      fax_number = #{record.faxNumber,jdbcType=VARCHAR},
+      access_type = #{record.accessType,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinoway.cisp.entitys.InstiDetail" >
+    update insti_detail
+    <set >
+      <if test="instiType != null" >
+        insti_type = #{instiType,jdbcType=INTEGER},
+      </if>
+      <if test="instiName != null" >
+        insti_name = #{instiName,jdbcType=VARCHAR},
+      </if>
+      <if test="instiShortname != null" >
+        insti_shortname = #{instiShortname,jdbcType=VARCHAR},
+      </if>
+      <if test="corporationName != null" >
+        corporation_name = #{corporationName,jdbcType=VARCHAR},
+      </if>
+      <if test="socialCreditCode != null" >
+        social_credit_code = #{socialCreditCode,jdbcType=VARCHAR},
+      </if>
+      <if test="creditPerson != null" >
+        credit_person = #{creditPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="generalManager != null" >
+        general_manager = #{generalManager,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredAddress != null" >
+        registered_address = #{registeredAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="registeredCapital != null" >
+        registered_capital = #{registeredCapital,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        zip_code = #{zipCode,jdbcType=INTEGER},
+      </if>
+      <if test="instiPhone != null" >
+        insti_phone = #{instiPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="instiLocation != null" >
+        insti_location = #{instiLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="webUrl != null" >
+        web_url = #{webUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="faxNumber != null" >
+        fax_number = #{faxNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="accessType != null" >
+        access_type = #{accessType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where insti_code = #{instiCode,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinoway.cisp.entitys.InstiDetail" >
+    update insti_detail
+    set insti_type = #{instiType,jdbcType=INTEGER},
+      insti_name = #{instiName,jdbcType=VARCHAR},
+      insti_shortname = #{instiShortname,jdbcType=VARCHAR},
+      corporation_name = #{corporationName,jdbcType=VARCHAR},
+      social_credit_code = #{socialCreditCode,jdbcType=VARCHAR},
+      credit_person = #{creditPerson,jdbcType=VARCHAR},
+      general_manager = #{generalManager,jdbcType=VARCHAR},
+      registered_address = #{registeredAddress,jdbcType=VARCHAR},
+      registered_capital = #{registeredCapital,jdbcType=VARCHAR},
+      zip_code = #{zipCode,jdbcType=INTEGER},
+      insti_phone = #{instiPhone,jdbcType=VARCHAR},
+      insti_location = #{instiLocation,jdbcType=VARCHAR},
+      web_url = #{webUrl,jdbcType=VARCHAR},
+      fax_number = #{faxNumber,jdbcType=VARCHAR},
+      access_type = #{accessType,jdbcType=VARCHAR}
+    where insti_code = #{instiCode,jdbcType=INTEGER}
+  </update>
+</mapper>

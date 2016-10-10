@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinoway.cisp.dao.PaidMonthlyAmountMapper" >
+  <resultMap id="BaseResultMap" type="com.sinoway.cisp.entitys.PaidMonthlyAmount" >
+    <id column="sinoid" property="sinoid" jdbcType="VARCHAR" />
+    <result column="paymentNumber" property="paymentnumber" jdbcType="INTEGER" />
+    <result column="paid_money" property="paidMoney" jdbcType="DECIMAL" />
+    <result column="paid_time" property="paidTime" jdbcType="TIMESTAMP" />
+    <result column="sinotime" property="sinotime" jdbcType="TIMESTAMP" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    sinoid, paymentNumber, paid_money, paid_time, sinotime, remark
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sinoway.cisp.entitys.PaidMonthlyAmountExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from paid_monthly_amount
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from paid_monthly_amount
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from paid_monthly_amount
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinoway.cisp.entitys.PaidMonthlyAmountExample" >
+    delete from paid_monthly_amount
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinoway.cisp.entitys.PaidMonthlyAmount" >
+    insert into paid_monthly_amount (sinoid, paymentNumber, paid_money, 
+      paid_time, sinotime, remark
+      )
+    values (#{sinoid,jdbcType=VARCHAR}, #{paymentnumber,jdbcType=INTEGER}, #{paidMoney,jdbcType=DECIMAL}, 
+      #{paidTime,jdbcType=TIMESTAMP}, #{sinotime,jdbcType=TIMESTAMP}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinoway.cisp.entitys.PaidMonthlyAmount" >
+    insert into paid_monthly_amount
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sinoid != null" >
+        sinoid,
+      </if>
+      <if test="paymentnumber != null" >
+        paymentNumber,
+      </if>
+      <if test="paidMoney != null" >
+        paid_money,
+      </if>
+      <if test="paidTime != null" >
+        paid_time,
+      </if>
+      <if test="sinotime != null" >
+        sinotime,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sinoid != null" >
+        #{sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentnumber != null" >
+        #{paymentnumber,jdbcType=INTEGER},
+      </if>
+      <if test="paidMoney != null" >
+        #{paidMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="paidTime != null" >
+        #{paidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sinotime != null" >
+        #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinoway.cisp.entitys.PaidMonthlyAmountExample" resultType="java.lang.Integer" >
+    select count(*) from paid_monthly_amount
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update paid_monthly_amount
+    <set >
+      <if test="record.sinoid != null" >
+        sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentnumber != null" >
+        paymentNumber = #{record.paymentnumber,jdbcType=INTEGER},
+      </if>
+      <if test="record.paidMoney != null" >
+        paid_money = #{record.paidMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.paidTime != null" >
+        paid_time = #{record.paidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sinotime != null" >
+        sinotime = #{record.sinotime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.remark != null" >
+        remark = #{record.remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update paid_monthly_amount
+    set sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      paymentNumber = #{record.paymentnumber,jdbcType=INTEGER},
+      paid_money = #{record.paidMoney,jdbcType=DECIMAL},
+      paid_time = #{record.paidTime,jdbcType=TIMESTAMP},
+      sinotime = #{record.sinotime,jdbcType=TIMESTAMP},
+      remark = #{record.remark,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinoway.cisp.entitys.PaidMonthlyAmount" >
+    update paid_monthly_amount
+    <set >
+      <if test="paymentnumber != null" >
+        paymentNumber = #{paymentnumber,jdbcType=INTEGER},
+      </if>
+      <if test="paidMoney != null" >
+        paid_money = #{paidMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="paidTime != null" >
+        paid_time = #{paidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sinotime != null" >
+        sinotime = #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinoway.cisp.entitys.PaidMonthlyAmount" >
+    update paid_monthly_amount
+    set paymentNumber = #{paymentnumber,jdbcType=INTEGER},
+      paid_money = #{paidMoney,jdbcType=DECIMAL},
+      paid_time = #{paidTime,jdbcType=TIMESTAMP},
+      sinotime = #{sinotime,jdbcType=TIMESTAMP},
+      remark = #{remark,jdbcType=VARCHAR}
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+</mapper>

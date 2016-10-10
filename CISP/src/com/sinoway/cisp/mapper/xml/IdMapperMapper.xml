@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinoway.cisp.dao.IdMapperMapper" >
+  <resultMap id="BaseResultMap" type="com.sinoway.cisp.entitys.IdMapper" >
+    <id column="sinoid" property="sinoid" jdbcType="VARCHAR" />
+    <result column="instiid" property="instiid" jdbcType="VARCHAR" />
+    <result column="contract_id" property="contractId" jdbcType="VARCHAR" />
+    <result column="insti_code" property="instiCode" jdbcType="VARCHAR" />
+    <result column="data_from" property="dataFrom" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="cardid" property="cardid" jdbcType="VARCHAR" />
+    <result column="cr_status" property="crStatus" jdbcType="VARCHAR" />
+    <result column="sinotime" property="sinotime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    sinoid, instiid, contract_id, insti_code, data_from, name, cardid, cr_status, sinotime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sinoway.cisp.entitys.IdMapperExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from id_mapper
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from id_mapper
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from id_mapper
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinoway.cisp.entitys.IdMapperExample" >
+    delete from id_mapper
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinoway.cisp.entitys.IdMapper" >
+    insert into id_mapper (sinoid, instiid, contract_id, 
+      insti_code, data_from, name, 
+      cardid, cr_status, sinotime
+      )
+    values (#{sinoid,jdbcType=VARCHAR}, #{instiid,jdbcType=VARCHAR}, #{contractId,jdbcType=VARCHAR}, 
+      #{instiCode,jdbcType=VARCHAR}, #{dataFrom,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, 
+      #{cardid,jdbcType=VARCHAR}, #{crStatus,jdbcType=VARCHAR}, #{sinotime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinoway.cisp.entitys.IdMapper" >
+    insert into id_mapper
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sinoid != null" >
+        sinoid,
+      </if>
+      <if test="instiid != null" >
+        instiid,
+      </if>
+      <if test="contractId != null" >
+        contract_id,
+      </if>
+      <if test="instiCode != null" >
+        insti_code,
+      </if>
+      <if test="dataFrom != null" >
+        data_from,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="cardid != null" >
+        cardid,
+      </if>
+      <if test="crStatus != null" >
+        cr_status,
+      </if>
+      <if test="sinotime != null" >
+        sinotime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sinoid != null" >
+        #{sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="instiid != null" >
+        #{instiid,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+        #{contractId,jdbcType=VARCHAR},
+      </if>
+      <if test="instiCode != null" >
+        #{instiCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dataFrom != null" >
+        #{dataFrom,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cardid != null" >
+        #{cardid,jdbcType=VARCHAR},
+      </if>
+      <if test="crStatus != null" >
+        #{crStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="sinotime != null" >
+        #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinoway.cisp.entitys.IdMapperExample" resultType="java.lang.Integer" >
+    select count(*) from id_mapper
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update id_mapper
+    <set >
+      <if test="record.sinoid != null" >
+        sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.instiid != null" >
+        instiid = #{record.instiid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractId != null" >
+        contract_id = #{record.contractId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.instiCode != null" >
+        insti_code = #{record.instiCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.dataFrom != null" >
+        data_from = #{record.dataFrom,jdbcType=CHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardid != null" >
+        cardid = #{record.cardid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.crStatus != null" >
+        cr_status = #{record.crStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sinotime != null" >
+        sinotime = #{record.sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update id_mapper
+    set sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      instiid = #{record.instiid,jdbcType=VARCHAR},
+      contract_id = #{record.contractId,jdbcType=VARCHAR},
+      insti_code = #{record.instiCode,jdbcType=VARCHAR},
+      data_from = #{record.dataFrom,jdbcType=CHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      cardid = #{record.cardid,jdbcType=VARCHAR},
+      cr_status = #{record.crStatus,jdbcType=VARCHAR},
+      sinotime = #{record.sinotime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinoway.cisp.entitys.IdMapper" >
+    update id_mapper
+    <set >
+      <if test="instiid != null" >
+        instiid = #{instiid,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+        contract_id = #{contractId,jdbcType=VARCHAR},
+      </if>
+      <if test="instiCode != null" >
+        insti_code = #{instiCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dataFrom != null" >
+        data_from = #{dataFrom,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cardid != null" >
+        cardid = #{cardid,jdbcType=VARCHAR},
+      </if>
+      <if test="crStatus != null" >
+        cr_status = #{crStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="sinotime != null" >
+        sinotime = #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinoway.cisp.entitys.IdMapper" >
+    update id_mapper
+    set instiid = #{instiid,jdbcType=VARCHAR},
+      contract_id = #{contractId,jdbcType=VARCHAR},
+      insti_code = #{instiCode,jdbcType=VARCHAR},
+      data_from = #{dataFrom,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      cardid = #{cardid,jdbcType=VARCHAR},
+      cr_status = #{crStatus,jdbcType=VARCHAR},
+      sinotime = #{sinotime,jdbcType=TIMESTAMP}
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+  
+  <select id="getNameByCardid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from id_mapper
+    where cardid = #{cardid,jdbcType=VARCHAR} LIMIT 1
+   </select>
+  
+    <select id="selectBysinoid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from id_mapper
+    where sinoid = #{sinoid,jdbcType=VARCHAR} LIMIT 1
+    </select>
+  
+</mapper>

@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinoway.cisp.dao.OverdueStatusMapper" >
+  <resultMap id="BaseResultMap" type="com.sinoway.cisp.entitys.OverdueStatus" >
+    <id column="col_sn" property="colSn" jdbcType="CHAR" />
+    <id column="sinoid" property="sinoid" jdbcType="VARCHAR" />
+    <result column="payment_level" property="paymentLevel" jdbcType="INTEGER" />
+    <result column="overdue_start_time" property="overdueStartTime" jdbcType="TIMESTAMP" />
+    <result column="overdue_reason" property="overdueReason" jdbcType="CHAR" />
+    <result column="overdue_status_mark" property="overdueStatusMark" jdbcType="CHAR" />
+    <result column="sinotime" property="sinotime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    col_sn, sinoid, payment_level, overdue_start_time, overdue_reason, overdue_status_mark, 
+    sinotime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sinoway.cisp.entitys.OverdueStatusExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from overdue_status
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.sinoway.cisp.entitys.OverdueStatusKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from overdue_status
+    where col_sn = #{colSn,jdbcType=CHAR}
+      and sinoid = #{sinoid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByCardid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from overdue_status
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.sinoway.cisp.entitys.OverdueStatusKey" >
+    delete from overdue_status
+    where col_sn = #{colSn,jdbcType=CHAR}
+      and sinoid = #{sinoid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinoway.cisp.entitys.OverdueStatusExample" >
+    delete from overdue_status
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinoway.cisp.entitys.OverdueStatus" >
+    insert into overdue_status (col_sn, sinoid, payment_level, 
+      overdue_start_time, overdue_reason, overdue_status_mark, 
+      sinotime)
+    values (#{colSn,jdbcType=CHAR}, #{sinoid,jdbcType=VARCHAR}, #{paymentLevel,jdbcType=INTEGER}, 
+      #{overdueStartTime,jdbcType=TIMESTAMP}, #{overdueReason,jdbcType=CHAR}, #{overdueStatusMark,jdbcType=CHAR}, 
+      #{sinotime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinoway.cisp.entitys.OverdueStatus" >
+    insert into overdue_status
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="colSn != null" >
+        col_sn,
+      </if>
+      <if test="sinoid != null" >
+        sinoid,
+      </if>
+      <if test="paymentLevel != null" >
+        payment_level,
+      </if>
+      <if test="overdueStartTime != null" >
+        overdue_start_time,
+      </if>
+      <if test="overdueReason != null" >
+        overdue_reason,
+      </if>
+      <if test="overdueStatusMark != null" >
+        overdue_status_mark,
+      </if>
+      <if test="sinotime != null" >
+        sinotime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="colSn != null" >
+        #{colSn,jdbcType=CHAR},
+      </if>
+      <if test="sinoid != null" >
+        #{sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="paymentLevel != null" >
+        #{paymentLevel,jdbcType=INTEGER},
+      </if>
+      <if test="overdueStartTime != null" >
+        #{overdueStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overdueReason != null" >
+        #{overdueReason,jdbcType=CHAR},
+      </if>
+      <if test="overdueStatusMark != null" >
+        #{overdueStatusMark,jdbcType=CHAR},
+      </if>
+      <if test="sinotime != null" >
+        #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinoway.cisp.entitys.OverdueStatusExample" resultType="java.lang.Integer" >
+    select count(*) from overdue_status
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update overdue_status
+    <set >
+      <if test="record.colSn != null" >
+        col_sn = #{record.colSn,jdbcType=CHAR},
+      </if>
+      <if test="record.sinoid != null" >
+        sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.paymentLevel != null" >
+        payment_level = #{record.paymentLevel,jdbcType=INTEGER},
+      </if>
+      <if test="record.overdueStartTime != null" >
+        overdue_start_time = #{record.overdueStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.overdueReason != null" >
+        overdue_reason = #{record.overdueReason,jdbcType=CHAR},
+      </if>
+      <if test="record.overdueStatusMark != null" >
+        overdue_status_mark = #{record.overdueStatusMark,jdbcType=CHAR},
+      </if>
+      <if test="record.sinotime != null" >
+        sinotime = #{record.sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update overdue_status
+    set col_sn = #{record.colSn,jdbcType=CHAR},
+      sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      payment_level = #{record.paymentLevel,jdbcType=INTEGER},
+      overdue_start_time = #{record.overdueStartTime,jdbcType=TIMESTAMP},
+      overdue_reason = #{record.overdueReason,jdbcType=CHAR},
+      overdue_status_mark = #{record.overdueStatusMark,jdbcType=CHAR},
+      sinotime = #{record.sinotime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinoway.cisp.entitys.OverdueStatus" >
+    update overdue_status
+    <set >
+      <if test="paymentLevel != null" >
+        payment_level = #{paymentLevel,jdbcType=INTEGER},
+      </if>
+      <if test="overdueStartTime != null" >
+        overdue_start_time = #{overdueStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="overdueReason != null" >
+        overdue_reason = #{overdueReason,jdbcType=CHAR},
+      </if>
+      <if test="overdueStatusMark != null" >
+        overdue_status_mark = #{overdueStatusMark,jdbcType=CHAR},
+      </if>
+      <if test="sinotime != null" >
+        sinotime = #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where col_sn = #{colSn,jdbcType=CHAR}
+      and sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinoway.cisp.entitys.OverdueStatus" >
+    update overdue_status
+    set payment_level = #{paymentLevel,jdbcType=INTEGER},
+      overdue_start_time = #{overdueStartTime,jdbcType=TIMESTAMP},
+      overdue_reason = #{overdueReason,jdbcType=CHAR},
+      overdue_status_mark = #{overdueStatusMark,jdbcType=CHAR},
+      sinotime = #{sinotime,jdbcType=TIMESTAMP}
+    where col_sn = #{colSn,jdbcType=CHAR}
+      and sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+  
+  
+  
+</mapper>

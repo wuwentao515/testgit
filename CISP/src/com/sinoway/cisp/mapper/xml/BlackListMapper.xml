@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinoway.cisp.dao.BlackListMapper">
+	<resultMap id="BaseResultMap" type="com.sinoway.cisp.entitys.BlackList">
+		<id column="sinoId" property="sinoid" jdbcType="VARCHAR" />
+		<result column="overdue_start_time" property="overdueStartTime"
+			jdbcType="TIMESTAMP" />
+		<result column="reason" property="reason" jdbcType="VARCHAR" />
+		<result column="overdue_status_mark" property="overdueStatusMark"
+			jdbcType="CHAR" />
+		<result column="public_time" property="publicTime" jdbcType="TIMESTAMP" />
+		<result column="name" property="name" jdbcType="VARCHAR" />
+		<result column="cardid" property="cardid" jdbcType="VARCHAR" />
+		<result column="not_paid_money" property="notPaidMoney"
+			jdbcType="DECIMAL" />
+		<result column="overdue_times" property="overdueTimes"
+			jdbcType="CHAR" />
+		<result column="borrow_start_time" property="borrowStartTime"
+			jdbcType="TIMESTAMP" />
+		<result column="guarantee_type" property="guaranteeType"
+			jdbcType="CHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="live_address" property="liveAddress" jdbcType="VARCHAR" />
+		<result column="now_address" property="nowAddress" jdbcType="VARCHAR" />
+		<result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+		<result column="overdue_money" property="overdueMoney"
+			jdbcType="DECIMAL" />
+		<result column="loan_location" property="loanLocation"
+			jdbcType="VARCHAR" />
+		<result column="loan_type" property="loanType" jdbcType="VARCHAR" />
+		<result column="loan_start_time" property="loanStartTime"
+			jdbcType="TIMESTAMP" />
+		<result column="loan_guarantee" property="loanGuarantee"
+			jdbcType="VARCHAR" />
+		<result column="bornLocation" property="bornlocation" jdbcType="VARCHAR" />
+		<result column="overdue_duration" property="overdueDuration"
+			jdbcType="VARCHAR" />
+		<result column="overdue_status" property="overdueStatus"
+			jdbcType="VARCHAR" />
+		<result column="personal_address" property="personalAddress"
+			jdbcType="VARCHAR" />
+			<result column="overdue_times" property="overdueTimes"
+			jdbcType="VARCHAR" />
+	</resultMap>
+	<resultMap id="balckMap" type="com.sinoway.cisp.entitys.BLackListVo">
+		<result column="sinoId" property="sinoid" jdbcType="VARCHAR" />
+		<result column="public_time" property="public_time" jdbcType="TIMESTAMP" />
+		<result column="overdue_start_time" property="overdue_start_time"
+			jdbcType="TIMESTAMP" />
+		<result column="loan_location" property="loan_location"
+			jdbcType="VARCHAR" />
+		<result column="overdue_money" property="overdue_money"
+			jdbcType="DECIMAL" />
+		<result column="overdue_duration" property="overdue_duration"
+			jdbcType="VARCHAR" />
+		<result column="phone" property="phone" jdbcType="VARCHAR" />
+		<result column="email" property="email" jdbcType="VARCHAR" />
+		<result column="personal_address" property="personal_address"
+			jdbcType="VARCHAR" />
+		<result column="live_address" property="live_address" jdbcType="VARCHAR" />
+		<result column="reason" property="reason" jdbcType="VARCHAR" />
+	</resultMap>
+	<!-- 查询进件表中是否存在该用户 -->
+	<select id="selectUser" parameterType="java.lang.String"
+		resultType="java.lang.Integer">
+		select count(*) from loan_application where cardid=#{id}
+	</select>
+	<!--查询user表中的useraccount -->
+	<select id="selectUserAccount" parameterType="java.lang.String"
+		resultType="com.sinoway.cisp.entitys.User">
+		SELECT
+		user_account,user_psw,user_name,user_phone,user_mail,insti_code,last_time_login,user_type,qqnum,islock,user_key,user_private
+		from user where user_key=#{key}
+	</select>
+	<!-- 插入黑名单 -->
+	<insert id="insert" parameterType="com.sinoway.cisp.entitys.BlackList">
+		insert into blacklist (sinoId,
+		overdue_start_time, reason,
+		public_time, name, cardid,
+		phone, email,
+		live_address, overdue_money, loan_location,
+		loan_type,
+		loan_start_time, loan_guarantee,
+		overdue_duration, overdue_status,
+		user_account,
+		personal_address,
+		overdue_times)
+		values (#{sinoid,jdbcType=VARCHAR},
+		#{overdueStartTime,jdbcType=TIMESTAMP},
+		#{reason,jdbcType=VARCHAR},
+		#{publicTime,jdbcType=TIMESTAMP}, #{name,jdbcType=VARCHAR},
+		#{cardid,jdbcType=VARCHAR},
+		#{phone,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR},
+		#{liveAddress,jdbcType=VARCHAR}, #{overdueMoney,jdbcType=DECIMAL},
+		#{loanLocation,jdbcType=VARCHAR},
+		#{loanType,jdbcType=VARCHAR},
+		#{loanStartTime,jdbcType=TIMESTAMP},
+		#{loanGuarantee,jdbcType=VARCHAR},
+		#{overdueDuration,jdbcType=VARCHAR},
+		#{overdueStatus,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR},
+		#{personalAddress,jdbcType=VARCHAR},#{overdueTimes,jdbcType=VARCHAR})
+	</insert>
+
+	<!-- 查询机构简称 -->
+	<select id="selectShortName" parameterType="java.lang.String"
+		resultType="java.lang.String">
+		select insti_shortname from insti_detail where
+		insti_code=#{code}
+	</select>
+	<!-- 查询 -->
+	<select id="selectByExample" parameterType="com.sinoway.cisp.utils.Page"
+		resultMap="balckMap">
+		select sinoId, public_time,overdue_start_time,loan_location,
+		overdue_money,overdue_duration,phone,email,personal_address,
+		live_address,reason from blacklist
+		where name=#{0} and cardid=#{1}
+		<!-- <if test="userName != null and userName != ''"> and name=#{0} </if> 
+			<if test="idCard != null and idCard != ''"> and cardid=#{1} </if> -->
+
+	</select>
+
+</mapper>

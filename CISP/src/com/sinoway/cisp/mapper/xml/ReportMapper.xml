@@ -1,0 +1,396 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinoway.cisp.dao.ReportMapper" >
+  <resultMap id="BaseResultMap" type="com.sinoway.cisp.entitys.LoanApplication" >
+    <id column="sinoid" property="sinoid" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="cardid" property="cardid" jdbcType="VARCHAR" />
+    <result column="request_time" property="requestTime" jdbcType="TIMESTAMP" />
+    <result column="request_money" property="requestMoney" jdbcType="DECIMAL" />
+    <result column="request_location" property="requestLocation" jdbcType="VARCHAR" />
+    <result column="request_type" property="requestType" jdbcType="CHAR" />
+    <result column="sinotime" property="sinotime" jdbcType="TIMESTAMP" />
+    <result column="edu" property="edu" jdbcType="CHAR" />
+    <result column="request_result" property="requestResult" jdbcType="CHAR" />
+    <result column="refuse_reason" property="refuseReason" jdbcType="CHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    sinoid, name, cardid, request_time, request_money, request_location, request_type, 
+    sinotime, edu, request_result, refuse_reason
+  </sql>
+  
+   <!-- 正常未清 -->
+  <select id="zoutstanding" parameterType="String" resultType="int">
+  select  count(*) from loan_application where cardid=#{cardid} and 
+  request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -2 YEAR) AND SYSDATE() 
+  </select>
+  <!-- 正常结清 -->
+  <select id="zsettle" parameterType="String" resultType="int"> 
+    SELECT COUNT(*) FROM contract_accept_detail where contract_status="1" and  sinoid in (SELECT sinoid FROM loan_application where cardid =#{cardid}
+    and request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -2 YEAR) AND SYSDATE() 
+     ) 
+  </select>
+          <!-- 异常未清   -->
+   <select id="youtstanding" parameterType="String" resultType="int"> 
+     SELECT COUNT(*) from contract_accept_detail c
+     where  c.sinoid in (
+     SELECT o.sinoid from overdue_status o where 
+     o.sinoid in (SELECT l.sinoid FROM  loan_application l WHERE l.cardid=#{card}
+     and  l.request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -2 YEAR) AND SYSDATE() 
+     <![CDATA[  and  o.overdue_status_mark !=5 ]]>) 
+    )
+  </select>
+   <!-- 异常还清 -->
+   <select id="ysettle" parameterType="String" resultType="int"> 
+     SELECT COUNT(*) from contract_accept_detail c
+     where  c.sinoid in (
+     SELECT o.sinoid from overdue_status o where 
+     o.sinoid in (SELECT l.sinoid FROM  loan_application l WHERE l.cardid=#{card} 
+      and  l.request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -2 YEAR) AND SYSDATE() 
+     <![CDATA[  AND  o.overdue_status_mark =5 ]]>)
+    )
+   </select>
+   
+   
+    <!--近6个月贷款申请记录  待审-->
+   <select id="trial" parameterType="String" resultType="int"> 
+    SELECT COUNT(*) FROM loan_application where sinoid IN 
+   (SELECT sinoid FROM loan_application  
+     where cardid=1111 and request_result IN (0,3) and  request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -6 MONTH) AND SYSDATE() 
+   )
+   </select>
+   
+    <!--近6个月贷款申请记录  通过-->
+   <select id="pass" parameterType="String" resultType="int"> 
+    SELECT COUNT(*) FROM loan_application where sinoid IN 
+   (SELECT sinoid FROM loan_application  
+     where cardid=1111 <![CDATA[  and request_result =1 ]]> and  request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -6 MONTH) AND SYSDATE() 
+   )
+   </select>
+   
+    <!--近6个月贷款申请记录  拒绝-->
+   <select id="upass" parameterType="String" resultType="int"> 
+    SELECT COUNT(*) FROM loan_application where sinoid IN 
+   (SELECT sinoid FROM loan_application  
+     where cardid=1111 <![CDATA[  and request_result =2 ]]> and  request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -6 MONTH) AND SYSDATE() 
+   )
+   </select>
+  
+  <!--近6个月贷款申请记录  拒绝-->
+   <select id="cancel" parameterType="String" resultType="int"> 
+    SELECT COUNT(*) FROM loan_application where sinoid IN 
+   (SELECT sinoid FROM loan_application  
+     where cardid=#{cardid} <![CDATA[  and request_result =4 ]]> and  request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -6 MONTH) AND SYSDATE() 
+   )
+   </select>
+   <!--进2年的查询记录-->
+   <select id="serchHis" parameterType="String" resultType="int"> 
+    SELECT COUNT(*) FROM search_detail where
+    sinoid  in ( SELECT sinoid FROM loan_application where 
+    request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -2 YEAR) AND SYSDATE()  and cardid =#{cardid}
+  )
+      
+   </select>
+  
+  
+  <select id="selectSixMonth" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from loan_application
+    where cardid=#{cardid} and request_time>DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+  </select>
+  
+  <select id="selectContract" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from loan_application
+    where request_result="1" and cardid=#{cardid} and request_time>DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+  </select>
+  
+  
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sinoway.cisp.entitys.LoanApplicationExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from loan_application
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from loan_application
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from loan_application
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinoway.cisp.entitys.LoanApplicationExample" >
+    delete from loan_application
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinoway.cisp.entitys.LoanApplication" >
+    insert into loan_application (sinoid, name, cardid, 
+      request_time, request_money, request_location, 
+      request_type, sinotime, edu, 
+      request_result, refuse_reason)
+    values (#{sinoid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{cardid,jdbcType=VARCHAR}, 
+      #{requestTime,jdbcType=TIMESTAMP}, #{requestMoney,jdbcType=DECIMAL}, #{requestLocation,jdbcType=VARCHAR}, 
+      #{requestType,jdbcType=CHAR}, #{sinotime,jdbcType=TIMESTAMP}, #{edu,jdbcType=CHAR}, 
+      #{requestResult,jdbcType=CHAR}, #{refuseReason,jdbcType=CHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinoway.cisp.entitys.LoanApplication" >
+    insert into loan_application
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sinoid != null" >
+        sinoid,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="cardid != null" >
+        cardid,
+      </if>
+      <if test="requestTime != null" >
+        request_time,
+      </if>
+      <if test="requestMoney != null" >
+        request_money,
+      </if>
+      <if test="requestLocation != null" >
+        request_location,
+      </if>
+      <if test="requestType != null" >
+        request_type,
+      </if>
+      <if test="sinotime != null" >
+        sinotime,
+      </if>
+      <if test="edu != null" >
+        edu,
+      </if>
+      <if test="requestResult != null" >
+        request_result,
+      </if>
+      <if test="refuseReason != null" >
+        refuse_reason,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sinoid != null" >
+        #{sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cardid != null" >
+        #{cardid,jdbcType=VARCHAR},
+      </if>
+      <if test="requestTime != null" >
+        #{requestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="requestMoney != null" >
+        #{requestMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="requestLocation != null" >
+        #{requestLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="requestType != null" >
+        #{requestType,jdbcType=CHAR},
+      </if>
+      <if test="sinotime != null" >
+        #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="edu != null" >
+        #{edu,jdbcType=CHAR},
+      </if>
+      <if test="requestResult != null" >
+        #{requestResult,jdbcType=CHAR},
+      </if>
+      <if test="refuseReason != null" >
+        #{refuseReason,jdbcType=CHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinoway.cisp.entitys.LoanApplicationExample" resultType="java.lang.Integer" >
+    select count(*) from loan_application
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update loan_application
+    <set >
+      <if test="record.sinoid != null" >
+        sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardid != null" >
+        cardid = #{record.cardid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestTime != null" >
+        request_time = #{record.requestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.requestMoney != null" >
+        request_money = #{record.requestMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="record.requestLocation != null" >
+        request_location = #{record.requestLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.requestType != null" >
+        request_type = #{record.requestType,jdbcType=CHAR},
+      </if>
+      <if test="record.sinotime != null" >
+        sinotime = #{record.sinotime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.edu != null" >
+        edu = #{record.edu,jdbcType=CHAR},
+      </if>
+      <if test="record.requestResult != null" >
+        request_result = #{record.requestResult,jdbcType=CHAR},
+      </if>
+      <if test="record.refuseReason != null" >
+        refuse_reason = #{record.refuseReason,jdbcType=CHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update loan_application
+    set sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      cardid = #{record.cardid,jdbcType=VARCHAR},
+      request_time = #{record.requestTime,jdbcType=TIMESTAMP},
+      request_money = #{record.requestMoney,jdbcType=DECIMAL},
+      request_location = #{record.requestLocation,jdbcType=VARCHAR},
+      request_type = #{record.requestType,jdbcType=CHAR},
+      sinotime = #{record.sinotime,jdbcType=TIMESTAMP},
+      edu = #{record.edu,jdbcType=CHAR},
+      request_result = #{record.requestResult,jdbcType=CHAR},
+      refuse_reason = #{record.refuseReason,jdbcType=CHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinoway.cisp.entitys.LoanApplication" >
+    update loan_application
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cardid != null" >
+        cardid = #{cardid,jdbcType=VARCHAR},
+      </if>
+      <if test="requestTime != null" >
+        request_time = #{requestTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="requestMoney != null" >
+        request_money = #{requestMoney,jdbcType=DECIMAL},
+      </if>
+      <if test="requestLocation != null" >
+        request_location = #{requestLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="requestType != null" >
+        request_type = #{requestType,jdbcType=CHAR},
+      </if>
+      <if test="sinotime != null" >
+        sinotime = #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="edu != null" >
+        edu = #{edu,jdbcType=CHAR},
+      </if>
+      <if test="requestResult != null" >
+        request_result = #{requestResult,jdbcType=CHAR},
+      </if>
+      <if test="refuseReason != null" >
+        refuse_reason = #{refuseReason,jdbcType=CHAR},
+      </if>
+    </set>
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinoway.cisp.entitys.LoanApplication" >
+    update loan_application
+    set name = #{name,jdbcType=VARCHAR},
+      cardid = #{cardid,jdbcType=VARCHAR},
+      request_time = #{requestTime,jdbcType=TIMESTAMP},
+      request_money = #{requestMoney,jdbcType=DECIMAL},
+      request_location = #{requestLocation,jdbcType=VARCHAR},
+      request_type = #{requestType,jdbcType=CHAR},
+      sinotime = #{sinotime,jdbcType=TIMESTAMP},
+      edu = #{edu,jdbcType=CHAR},
+      request_result = #{requestResult,jdbcType=CHAR},
+      refuse_reason = #{refuseReason,jdbcType=CHAR}
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+</mapper>

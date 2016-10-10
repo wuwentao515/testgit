@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinoway.cisp.dao.SearchDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.sinoway.cisp.entitys.SearchDetail" >
+    <id column="report_id" property="reportId" jdbcType="VARCHAR" />
+    <id column="sinoid" property="sinoid" jdbcType="VARCHAR" />
+    <result column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="req_reason" property="reqReason" jdbcType="CHAR" />
+    <result column="result_add" property="resultAdd" jdbcType="VARCHAR" />
+    <result column="req_time" property="reqTime" jdbcType="TIMESTAMP" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="cardid" property="cardid" jdbcType="VARCHAR" />
+    <result column="sinotime" property="sinotime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    report_id, sinoid, user_account, req_reason, result_add, req_time, name, cardid, 
+    sinotime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sinoway.cisp.entitys.SearchDetailExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from search_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.sinoway.cisp.entitys.SearchDetailKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from search_detail
+    where report_id = #{reportId,jdbcType=VARCHAR}
+      and sinoid = #{sinoid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectBycardid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from search_detail
+    where cardid = #{cardid,jdbcType=VARCHAR} ORDER BY req_time desc
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="com.sinoway.cisp.entitys.SearchDetailKey" >
+    delete from search_detail
+    where report_id = #{reportId,jdbcType=VARCHAR}
+      and sinoid = #{sinoid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinoway.cisp.entitys.SearchDetailExample" >
+    delete from search_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinoway.cisp.entitys.SearchDetail" >
+    insert into search_detail (report_id, sinoid, user_account, 
+      req_reason, result_add, req_time, 
+      name, cardid, sinotime
+      )
+    values (#{reportId,jdbcType=VARCHAR}, #{sinoid,jdbcType=VARCHAR}, #{userAccount,jdbcType=VARCHAR}, 
+      #{reqReason,jdbcType=CHAR}, #{resultAdd,jdbcType=VARCHAR}, #{reqTime,jdbcType=TIMESTAMP}, 
+      #{name,jdbcType=VARCHAR}, #{cardid,jdbcType=VARCHAR}, #{sinotime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinoway.cisp.entitys.SearchDetail" >
+    insert into search_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reportId != null" >
+        report_id,
+      </if>
+      <if test="sinoid != null" >
+        sinoid,
+      </if>
+      <if test="userAccount != null" >
+        user_account,
+      </if>
+      <if test="reqReason != null" >
+        req_reason,
+      </if>
+      <if test="resultAdd != null" >
+        result_add,
+      </if>
+      <if test="reqTime != null" >
+        req_time,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="cardid != null" >
+        cardid,
+      </if>
+      <if test="sinotime != null" >
+        sinotime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reportId != null" >
+        #{reportId,jdbcType=VARCHAR},
+      </if>
+      <if test="sinoid != null" >
+        #{sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="userAccount != null" >
+        #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="reqReason != null" >
+        #{reqReason,jdbcType=CHAR},
+      </if>
+      <if test="resultAdd != null" >
+        #{resultAdd,jdbcType=VARCHAR},
+      </if>
+      <if test="reqTime != null" >
+        #{reqTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cardid != null" >
+        #{cardid,jdbcType=VARCHAR},
+      </if>
+      <if test="sinotime != null" >
+        #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinoway.cisp.entitys.SearchDetailExample" resultType="java.lang.Integer" >
+    select count(*) from search_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update search_detail
+    <set >
+      <if test="record.reportId != null" >
+        report_id = #{record.reportId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sinoid != null" >
+        sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userAccount != null" >
+        user_account = #{record.userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reqReason != null" >
+        req_reason = #{record.reqReason,jdbcType=CHAR},
+      </if>
+      <if test="record.resultAdd != null" >
+        result_add = #{record.resultAdd,jdbcType=VARCHAR},
+      </if>
+      <if test="record.reqTime != null" >
+        req_time = #{record.reqTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.name != null" >
+        name = #{record.name,jdbcType=VARCHAR},
+      </if>
+      <if test="record.cardid != null" >
+        cardid = #{record.cardid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sinotime != null" >
+        sinotime = #{record.sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update search_detail
+    set report_id = #{record.reportId,jdbcType=VARCHAR},
+      sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      user_account = #{record.userAccount,jdbcType=VARCHAR},
+      req_reason = #{record.reqReason,jdbcType=CHAR},
+      result_add = #{record.resultAdd,jdbcType=VARCHAR},
+      req_time = #{record.reqTime,jdbcType=TIMESTAMP},
+      name = #{record.name,jdbcType=VARCHAR},
+      cardid = #{record.cardid,jdbcType=VARCHAR},
+      sinotime = #{record.sinotime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinoway.cisp.entitys.SearchDetail" >
+    update search_detail
+    <set >
+      <if test="userAccount != null" >
+        user_account = #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="reqReason != null" >
+        req_reason = #{reqReason,jdbcType=CHAR},
+      </if>
+      <if test="resultAdd != null" >
+        result_add = #{resultAdd,jdbcType=VARCHAR},
+      </if>
+      <if test="reqTime != null" >
+        req_time = #{reqTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="cardid != null" >
+        cardid = #{cardid,jdbcType=VARCHAR},
+      </if>
+      <if test="sinotime != null" >
+        sinotime = #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where report_id = #{reportId,jdbcType=VARCHAR}
+      and sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinoway.cisp.entitys.SearchDetail" >
+    update search_detail
+    set user_account = #{userAccount,jdbcType=VARCHAR},
+      req_reason = #{reqReason,jdbcType=CHAR},
+      result_add = #{resultAdd,jdbcType=VARCHAR},
+      req_time = #{reqTime,jdbcType=TIMESTAMP},
+      name = #{name,jdbcType=VARCHAR},
+      cardid = #{cardid,jdbcType=VARCHAR},
+      sinotime = #{sinotime,jdbcType=TIMESTAMP}
+    where report_id = #{reportId,jdbcType=VARCHAR}
+      and sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+</mapper>

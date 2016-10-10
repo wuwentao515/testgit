@@ -1,0 +1,323 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinoway.cisp.dao.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.sinoway.cisp.entitys.User" >
+    <id column="user_account" property="userAccount" jdbcType="VARCHAR" />
+    <result column="user_psw" property="userPsw" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_phone" property="userPhone" jdbcType="VARCHAR" />
+    <result column="user_mail" property="userMail" jdbcType="VARCHAR" />
+    <result column="insti_code" property="instiCode" jdbcType="INTEGER" />
+    <result column="last_time_login" property="lastTimeLogin" jdbcType="TIMESTAMP" />
+    <result column="user_type" property="userType" jdbcType="CHAR" />
+    <result column="qqnum" property="qqnum" jdbcType="VARCHAR" />
+    <result column="islock" property="islock" jdbcType="VARCHAR" />
+    <result column="user_key" property="userKey" jdbcType="VARCHAR" />
+    <result column="user_private" property="userPrivate" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    user_account, user_psw, user_name, user_phone, user_mail, insti_code, last_time_login, 
+    user_type, qqnum, islock, user_key, user_private
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sinoway.cisp.entitys.UserExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where user_account = #{userAccount,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from user
+    where user_account = #{userAccount,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinoway.cisp.entitys.UserExample" >
+    delete from user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinoway.cisp.entitys.User" >
+    insert into user (user_account, user_psw, user_name, 
+      user_phone, user_mail, insti_code, 
+      last_time_login, user_type, qqnum, 
+      islock, user_key, user_private
+      )
+    values (#{userAccount,jdbcType=VARCHAR}, #{userPsw,jdbcType=VARCHAR}, #{userName,jdbcType=VARCHAR}, 
+      #{userPhone,jdbcType=VARCHAR}, #{userMail,jdbcType=VARCHAR}, #{instiCode,jdbcType=INTEGER}, 
+      #{lastTimeLogin,jdbcType=TIMESTAMP}, #{userType,jdbcType=CHAR}, #{qqnum,jdbcType=VARCHAR}, 
+      #{islock,jdbcType=VARCHAR}, #{userKey,jdbcType=VARCHAR}, #{userPrivate,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinoway.cisp.entitys.User" >
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userAccount != null" >
+        user_account,
+      </if>
+      <if test="userPsw != null" >
+        user_psw,
+      </if>
+      <if test="userName != null" >
+        user_name,
+      </if>
+      <if test="userPhone != null" >
+        user_phone,
+      </if>
+      <if test="userMail != null" >
+        user_mail,
+      </if>
+      <if test="instiCode != null" >
+        insti_code,
+      </if>
+      <if test="lastTimeLogin != null" >
+        last_time_login,
+      </if>
+      <if test="userType != null" >
+        user_type,
+      </if>
+      <if test="qqnum != null" >
+        qqnum,
+      </if>
+      <if test="islock != null" >
+        islock,
+      </if>
+      <if test="userKey != null" >
+        user_key,
+      </if>
+      <if test="userPrivate != null" >
+        user_private,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userAccount != null" >
+        #{userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="userPsw != null" >
+        #{userPsw,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null" >
+        #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userMail != null" >
+        #{userMail,jdbcType=VARCHAR},
+      </if>
+      <if test="instiCode != null" >
+        #{instiCode,jdbcType=INTEGER},
+      </if>
+      <if test="lastTimeLogin != null" >
+        #{lastTimeLogin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=CHAR},
+      </if>
+      <if test="qqnum != null" >
+        #{qqnum,jdbcType=VARCHAR},
+      </if>
+      <if test="islock != null" >
+        #{islock,jdbcType=VARCHAR},
+      </if>
+      <if test="userKey != null" >
+        #{userKey,jdbcType=VARCHAR},
+      </if>
+      <if test="userPrivate != null" >
+        #{userPrivate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinoway.cisp.entitys.UserExample" resultType="java.lang.Integer" >
+    select count(*) from user
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update user
+    <set >
+      <if test="record.userAccount != null" >
+        user_account = #{record.userAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userPsw != null" >
+        user_psw = #{record.userPsw,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userName != null" >
+        user_name = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userPhone != null" >
+        user_phone = #{record.userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userMail != null" >
+        user_mail = #{record.userMail,jdbcType=VARCHAR},
+      </if>
+      <if test="record.instiCode != null" >
+        insti_code = #{record.instiCode,jdbcType=INTEGER},
+      </if>
+      <if test="record.lastTimeLogin != null" >
+        last_time_login = #{record.lastTimeLogin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.userType != null" >
+        user_type = #{record.userType,jdbcType=CHAR},
+      </if>
+      <if test="record.qqnum != null" >
+        qqnum = #{record.qqnum,jdbcType=VARCHAR},
+      </if>
+      <if test="record.islock != null" >
+        islock = #{record.islock,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userKey != null" >
+        user_key = #{record.userKey,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userPrivate != null" >
+        user_private = #{record.userPrivate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update user
+    set user_account = #{record.userAccount,jdbcType=VARCHAR},
+      user_psw = #{record.userPsw,jdbcType=VARCHAR},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      user_phone = #{record.userPhone,jdbcType=VARCHAR},
+      user_mail = #{record.userMail,jdbcType=VARCHAR},
+      insti_code = #{record.instiCode,jdbcType=INTEGER},
+      last_time_login = #{record.lastTimeLogin,jdbcType=TIMESTAMP},
+      user_type = #{record.userType,jdbcType=CHAR},
+      qqnum = #{record.qqnum,jdbcType=VARCHAR},
+      islock = #{record.islock,jdbcType=VARCHAR},
+      user_key = #{record.userKey,jdbcType=VARCHAR},
+      user_private = #{record.userPrivate,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinoway.cisp.entitys.User" >
+    update user
+    <set >
+      <if test="userPsw != null" >
+        user_psw = #{userPsw,jdbcType=VARCHAR},
+      </if>
+      <if test="userName != null" >
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="userPhone != null" >
+        user_phone = #{userPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="userMail != null" >
+        user_mail = #{userMail,jdbcType=VARCHAR},
+      </if>
+      <if test="instiCode != null" >
+        insti_code = #{instiCode,jdbcType=INTEGER},
+      </if>
+      <if test="lastTimeLogin != null" >
+        last_time_login = #{lastTimeLogin,jdbcType=TIMESTAMP},
+      </if>
+      <if test="userType != null" >
+        user_type = #{userType,jdbcType=CHAR},
+      </if>
+      <if test="qqnum != null" >
+        qqnum = #{qqnum,jdbcType=VARCHAR},
+      </if>
+      <if test="islock != null" >
+        islock = #{islock,jdbcType=VARCHAR},
+      </if>
+      <if test="userKey != null" >
+        user_key = #{userKey,jdbcType=VARCHAR},
+      </if>
+      <if test="userPrivate != null" >
+        user_private = #{userPrivate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where user_account = #{userAccount,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinoway.cisp.entitys.User" >
+    update user
+    set user_psw = #{userPsw,jdbcType=VARCHAR},
+      user_name = #{userName,jdbcType=VARCHAR},
+      user_phone = #{userPhone,jdbcType=VARCHAR},
+      user_mail = #{userMail,jdbcType=VARCHAR},
+      insti_code = #{instiCode,jdbcType=INTEGER},
+      last_time_login = #{lastTimeLogin,jdbcType=TIMESTAMP},
+      user_type = #{userType,jdbcType=CHAR},
+      qqnum = #{qqnum,jdbcType=VARCHAR},
+      islock = #{islock,jdbcType=VARCHAR},
+      user_key = #{userKey,jdbcType=VARCHAR},
+      user_private = #{userPrivate,jdbcType=VARCHAR}
+    where user_account = #{userAccount,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinoway.cisp.dao.ExtendTimeMapper" >
+  <resultMap id="BaseResultMap" type="com.sinoway.cisp.entitys.ExtendTime" >
+    <id column="sinoid" property="sinoid" jdbcType="VARCHAR" />
+    <result column="extend_limit_time" property="extendLimitTime" jdbcType="TIMESTAMP" />
+    <result column="whole_not_paid" property="wholeNotPaid" jdbcType="DECIMAL" />
+    <result column="sinotime" property="sinotime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    sinoid, extend_limit_time, whole_not_paid, sinotime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sinoway.cisp.entitys.ExtendTimeExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from extend_time
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from extend_time
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from extend_time
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinoway.cisp.entitys.ExtendTimeExample" >
+    delete from extend_time
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinoway.cisp.entitys.ExtendTime" >
+    insert into extend_time (sinoid, extend_limit_time, whole_not_paid, 
+      sinotime)
+    values (#{sinoid,jdbcType=VARCHAR}, #{extendLimitTime,jdbcType=TIMESTAMP}, #{wholeNotPaid,jdbcType=DECIMAL}, 
+      #{sinotime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinoway.cisp.entitys.ExtendTime" >
+    insert into extend_time
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sinoid != null" >
+        sinoid,
+      </if>
+      <if test="extendLimitTime != null" >
+        extend_limit_time,
+      </if>
+      <if test="wholeNotPaid != null" >
+        whole_not_paid,
+      </if>
+      <if test="sinotime != null" >
+        sinotime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sinoid != null" >
+        #{sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="extendLimitTime != null" >
+        #{extendLimitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wholeNotPaid != null" >
+        #{wholeNotPaid,jdbcType=DECIMAL},
+      </if>
+      <if test="sinotime != null" >
+        #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinoway.cisp.entitys.ExtendTimeExample" resultType="java.lang.Integer" >
+    select count(*) from extend_time
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update extend_time
+    <set >
+      <if test="record.sinoid != null" >
+        sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extendLimitTime != null" >
+        extend_limit_time = #{record.extendLimitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.wholeNotPaid != null" >
+        whole_not_paid = #{record.wholeNotPaid,jdbcType=DECIMAL},
+      </if>
+      <if test="record.sinotime != null" >
+        sinotime = #{record.sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update extend_time
+    set sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      extend_limit_time = #{record.extendLimitTime,jdbcType=TIMESTAMP},
+      whole_not_paid = #{record.wholeNotPaid,jdbcType=DECIMAL},
+      sinotime = #{record.sinotime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinoway.cisp.entitys.ExtendTime" >
+    update extend_time
+    <set >
+      <if test="extendLimitTime != null" >
+        extend_limit_time = #{extendLimitTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="wholeNotPaid != null" >
+        whole_not_paid = #{wholeNotPaid,jdbcType=DECIMAL},
+      </if>
+      <if test="sinotime != null" >
+        sinotime = #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinoway.cisp.entitys.ExtendTime" >
+    update extend_time
+    set extend_limit_time = #{extendLimitTime,jdbcType=TIMESTAMP},
+      whole_not_paid = #{wholeNotPaid,jdbcType=DECIMAL},
+      sinotime = #{sinotime,jdbcType=TIMESTAMP}
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+</mapper>

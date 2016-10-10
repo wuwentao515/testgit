@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cisp.dao.StatisticMapper" >
+  <!-- 正常未清 -->
+  <select id="zoutstanding" parameterType="String" resultType="int">
+  select  count(*) from loan_application where cardid=#{cardid} and 
+  request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -2 YEAR) AND SYSDATE() 
+  </select>
+  <!-- 正常结清 -->
+  <select id="zsettle" parameterType="String" resultType="int"> 
+    SELECT COUNT(*) FROM obligator_rights_status where is_paid_fin=1 and  sinoid in (SELECT sinoid FROM loan_application where cardid =#{cardid}
+    and request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -2 YEAR) AND SYSDATE() 
+     ) 
+  </select>
+          <!-- 异常未清   -->
+   <select id="youtstanding" parameterType="String" resultType="int"> 
+     SELECT COUNT(*) from contract_accept_detail c
+     where  c.sinoid in (
+     SELECT o.sinoid from overdue_status o where 
+     o.sinoid in (SELECT l.sinoid FROM  loan_application l WHERE l.cardid=#{card}
+     and  l.request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -2 YEAR) AND SYSDATE() 
+     <![CDATA[  and  o.overdue_status_mark !=5 ]]>) 
+    )
+  </select>
+   <!-- 异常还清 -->
+   <select id="ysettle" parameterType="String" resultType="int"> 
+     SELECT COUNT(*) from contract_accept_detail c
+     where  c.sinoid in (
+     SELECT o.sinoid from overdue_status o where 
+     o.sinoid in (SELECT l.sinoid FROM  loan_application l WHERE l.cardid=#{card} 
+      and  l.request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -2 YEAR) AND SYSDATE() 
+     <![CDATA[  AND  o.overdue_status_mark =5 ]]>)
+    )
+   </select>
+   
+   
+    <!--近6个月贷款申请记录  待审-->
+   <select id="trial" parameterType="String" resultType="int"> 
+    SELECT COUNT(*) FROM loan_application where sinoid IN 
+   (SELECT sinoid FROM loan_application  
+     where cardid=#{cardid} and request_result IN ("0","3") and  request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -6 MONTH) AND SYSDATE() 
+   )
+   </select>
+   
+    <!--近6个月贷款申请记录  通过-->
+   <select id="pass" parameterType="String" resultType="int"> 
+   SELECT COUNT(*) FROM loan_application where sinoid IN 
+   (SELECT sinoid FROM loan_application  
+     where cardid=#{cardid} and request_result ="1" and  request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -6 MONTH) AND SYSDATE() 
+   )
+   </select>
+   
+    <!--近6个月贷款申请记录  拒绝-->
+   <select id="upass" parameterType="String" resultType="int"> 
+    SELECT COUNT(*) FROM loan_application where sinoid IN 
+   (SELECT sinoid FROM loan_application  
+     where cardid=#{cardid} <![CDATA[  and request_result ="2" ]]> and  request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -6 MONTH) AND SYSDATE() 
+   )
+   </select>
+  
+  <!--近6个月贷款申请记录  拒绝-->
+   <select id="cancel" parameterType="String" resultType="int"> 
+    SELECT COUNT(*) FROM loan_application where sinoid IN 
+   (SELECT sinoid FROM loan_application  
+     where cardid=#{cardid} <![CDATA[  and request_result ="4" ]]> and  request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -6 MONTH) AND SYSDATE() 
+   )
+   </select>
+   <!--进2年的查询记录-->
+   <select id="serchHis" parameterType="String" resultType="int"> 
+    SELECT COUNT(*) FROM search_detail where
+    sinoid  in ( SELECT sinoid FROM loan_application where 
+    request_time BETWEEN ADDDATE(SYSDATE(),INTERVAL  -2 YEAR) AND SYSDATE()  and cardid =#{cardid}
+  )
+      
+   </select>
+   
+</mapper>

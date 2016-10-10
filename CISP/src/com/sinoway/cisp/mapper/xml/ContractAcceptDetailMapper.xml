@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.sinoway.cisp.dao.ContractAcceptDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.sinoway.cisp.entitys.ContractAcceptDetail" >
+    <id column="sinoid" property="sinoid" jdbcType="VARCHAR" />
+    <result column="contract_id" property="contractId" jdbcType="VARCHAR" />
+    <result column="contract_sum" property="contractSum" jdbcType="DECIMAL" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="stop_time" property="stopTime" jdbcType="TIMESTAMP" />
+    <result column="contract_type" property="contractType" jdbcType="CHAR" />
+    <result column="guara_type" property="guaraType" jdbcType="CHAR" />
+    <result column="pay_period" property="payPeriod" jdbcType="CHAR" />
+    <result column="pay_location" property="payLocation" jdbcType="VARCHAR" />
+    <result column="contract_status" property="contractStatus" jdbcType="CHAR" />
+    <result column="settle_time" property="settleTime" jdbcType="TIMESTAMP" />
+    <result column="sinotime" property="sinotime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    sinoid, contract_id, contract_sum, start_time, stop_time, contract_type, guara_type, 
+    pay_period, pay_location, contract_status, settle_time, sinotime
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.sinoway.cisp.entitys.ContractAcceptDetailExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from contract_accept_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from contract_accept_detail
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </select>
+  <select id="selectByCardid" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from contract_accept_detail
+    where sinoid IN(
+	SELECT sinoid FROM `loan_application` where cardid=#{cardid,jdbcType=VARCHAR} AND request_result="1" and request_time>DATE_SUB(CURDATE(), INTERVAL 6 MONTH))
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from contract_accept_detail
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.sinoway.cisp.entitys.ContractAcceptDetailExample" >
+    delete from contract_accept_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.sinoway.cisp.entitys.ContractAcceptDetail" >
+    insert into contract_accept_detail (sinoid, contract_id, contract_sum, 
+      start_time, stop_time, contract_type, 
+      guara_type, pay_period, pay_location, 
+      contract_status, settle_time, sinotime
+      )
+    values (#{sinoid,jdbcType=VARCHAR}, #{contractId,jdbcType=VARCHAR}, #{contractSum,jdbcType=DECIMAL}, 
+      #{startTime,jdbcType=TIMESTAMP}, #{stopTime,jdbcType=TIMESTAMP}, #{contractType,jdbcType=CHAR}, 
+      #{guaraType,jdbcType=CHAR}, #{payPeriod,jdbcType=CHAR}, #{payLocation,jdbcType=VARCHAR}, 
+      #{contractStatus,jdbcType=CHAR}, #{settleTime,jdbcType=TIMESTAMP}, #{sinotime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.sinoway.cisp.entitys.ContractAcceptDetail" >
+    insert into contract_accept_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sinoid != null" >
+        sinoid,
+      </if>
+      <if test="contractId != null" >
+        contract_id,
+      </if>
+      <if test="contractSum != null" >
+        contract_sum,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="stopTime != null" >
+        stop_time,
+      </if>
+      <if test="contractType != null" >
+        contract_type,
+      </if>
+      <if test="guaraType != null" >
+        guara_type,
+      </if>
+      <if test="payPeriod != null" >
+        pay_period,
+      </if>
+      <if test="payLocation != null" >
+        pay_location,
+      </if>
+      <if test="contractStatus != null" >
+        contract_status,
+      </if>
+      <if test="settleTime != null" >
+        settle_time,
+      </if>
+      <if test="sinotime != null" >
+        sinotime,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sinoid != null" >
+        #{sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="contractId != null" >
+        #{contractId,jdbcType=VARCHAR},
+      </if>
+      <if test="contractSum != null" >
+        #{contractSum,jdbcType=DECIMAL},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stopTime != null" >
+        #{stopTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractType != null" >
+        #{contractType,jdbcType=CHAR},
+      </if>
+      <if test="guaraType != null" >
+        #{guaraType,jdbcType=CHAR},
+      </if>
+      <if test="payPeriod != null" >
+        #{payPeriod,jdbcType=CHAR},
+      </if>
+      <if test="payLocation != null" >
+        #{payLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="contractStatus != null" >
+        #{contractStatus,jdbcType=CHAR},
+      </if>
+      <if test="settleTime != null" >
+        #{settleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sinotime != null" >
+        #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.sinoway.cisp.entitys.ContractAcceptDetailExample" resultType="java.lang.Integer" >
+    select count(*) from contract_accept_detail
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update contract_accept_detail
+    <set >
+      <if test="record.sinoid != null" >
+        sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractId != null" >
+        contract_id = #{record.contractId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractSum != null" >
+        contract_sum = #{record.contractSum,jdbcType=DECIMAL},
+      </if>
+      <if test="record.startTime != null" >
+        start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.stopTime != null" >
+        stop_time = #{record.stopTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.contractType != null" >
+        contract_type = #{record.contractType,jdbcType=CHAR},
+      </if>
+      <if test="record.guaraType != null" >
+        guara_type = #{record.guaraType,jdbcType=CHAR},
+      </if>
+      <if test="record.payPeriod != null" >
+        pay_period = #{record.payPeriod,jdbcType=CHAR},
+      </if>
+      <if test="record.payLocation != null" >
+        pay_location = #{record.payLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contractStatus != null" >
+        contract_status = #{record.contractStatus,jdbcType=CHAR},
+      </if>
+      <if test="record.settleTime != null" >
+        settle_time = #{record.settleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.sinotime != null" >
+        sinotime = #{record.sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update contract_accept_detail
+    set sinoid = #{record.sinoid,jdbcType=VARCHAR},
+      contract_id = #{record.contractId,jdbcType=VARCHAR},
+      contract_sum = #{record.contractSum,jdbcType=DECIMAL},
+      start_time = #{record.startTime,jdbcType=TIMESTAMP},
+      stop_time = #{record.stopTime,jdbcType=TIMESTAMP},
+      contract_type = #{record.contractType,jdbcType=CHAR},
+      guara_type = #{record.guaraType,jdbcType=CHAR},
+      pay_period = #{record.payPeriod,jdbcType=CHAR},
+      pay_location = #{record.payLocation,jdbcType=VARCHAR},
+      contract_status = #{record.contractStatus,jdbcType=CHAR},
+      settle_time = #{record.settleTime,jdbcType=TIMESTAMP},
+      sinotime = #{record.sinotime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.sinoway.cisp.entitys.ContractAcceptDetail" >
+    update contract_accept_detail
+    <set >
+      <if test="contractId != null" >
+        contract_id = #{contractId,jdbcType=VARCHAR},
+      </if>
+      <if test="contractSum != null" >
+        contract_sum = #{contractSum,jdbcType=DECIMAL},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="stopTime != null" >
+        stop_time = #{stopTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractType != null" >
+        contract_type = #{contractType,jdbcType=CHAR},
+      </if>
+      <if test="guaraType != null" >
+        guara_type = #{guaraType,jdbcType=CHAR},
+      </if>
+      <if test="payPeriod != null" >
+        pay_period = #{payPeriod,jdbcType=CHAR},
+      </if>
+      <if test="payLocation != null" >
+        pay_location = #{payLocation,jdbcType=VARCHAR},
+      </if>
+      <if test="contractStatus != null" >
+        contract_status = #{contractStatus,jdbcType=CHAR},
+      </if>
+      <if test="settleTime != null" >
+        settle_time = #{settleTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sinotime != null" >
+        sinotime = #{sinotime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.sinoway.cisp.entitys.ContractAcceptDetail" >
+    update contract_accept_detail
+    set contract_id = #{contractId,jdbcType=VARCHAR},
+      contract_sum = #{contractSum,jdbcType=DECIMAL},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      stop_time = #{stopTime,jdbcType=TIMESTAMP},
+      contract_type = #{contractType,jdbcType=CHAR},
+      guara_type = #{guaraType,jdbcType=CHAR},
+      pay_period = #{payPeriod,jdbcType=CHAR},
+      pay_location = #{payLocation,jdbcType=VARCHAR},
+      contract_status = #{contractStatus,jdbcType=CHAR},
+      settle_time = #{settleTime,jdbcType=TIMESTAMP},
+      sinotime = #{sinotime,jdbcType=TIMESTAMP}
+    where sinoid = #{sinoid,jdbcType=VARCHAR}
+  </update>
+</mapper>
